@@ -2,12 +2,14 @@
 
 #include "PointLight.h"
 
-class SpotLight : PointLight
+class SpotLight : public PointLight
 {
 public:
 	SpotLight();
 
 	SpotLight(
+		GLfloat shadowWidth, GLfloat shadowHeight,
+		GLfloat near, GLfloat far,
 		GLfloat red, GLfloat green, GLfloat blue,
 		GLfloat aIntensity, GLfloat dIntensity,
 		GLfloat xPos, GLfloat yPos, GLfloat zPos,
