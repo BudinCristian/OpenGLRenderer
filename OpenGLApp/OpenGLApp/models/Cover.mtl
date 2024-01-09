@@ -1,0 +1,5 @@
+﻿newmtl M_BlackBackground
+	map_Kd M_BlackBackground_D.bmp
+	map_Ks M_BlackBackground_S.bmp
+	bump M_BlackBackground_N.bmp
+

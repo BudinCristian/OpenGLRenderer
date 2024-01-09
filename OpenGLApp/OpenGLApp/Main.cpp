@@ -41,7 +41,7 @@ uniformOmniLightPos = 0, uniformFarPlane = 0;
 
 Window mainWindow;
 
-std::vector<Mesh*> meshList;
+
 
 std::vector<Shader> shaderList;
 Shader directionalShadowShader;
@@ -66,13 +66,20 @@ unsigned int spotLightCount = 0;
 Material shinyMaterial;
 Material matteMaterial;
 
-Model xwing;
 Model blackhawk;
+Model blackhawkMainRotor;
+Model blackhawkRearRotor;
+Model street;
+Model cover;
 
 GLfloat deltaTime = 0.f;
 GLfloat lastTime = 0.f;
 
 GLfloat blackhawkAngle = 0.f;
+GLfloat mainRotorAngle = 0.f;
+GLfloat rearRotorAngle = 0.f;
+
+int previewState = 0;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader.vert";
@@ -122,52 +129,6 @@ void calcAverageNormals(unsigned int* indices, unsigned int indicesCount, GLfloa
 	}
 }
 
-
-void CreateObjects()
-{
-	unsigned int indices[] = {
-		0,3,1,
-		1,3,2,
-		2,3,0,
-		0,1,2
-	};
-
-	GLfloat vertices[] = {
-		//	x	  y	     z			u    v			 nx	 ny   nz
-			-1.f, -1.f, -0.6f,    0.f, 0.f,			 0.f, 0.f, 0.f,
-			0.f, -1.f, 1.f,		  0.5, 0.f,			 0.f, 0.f, 0.f,
-			1.f, -1.f, -0.6f,	  1.f, 0.f,			 0.f, 0.f, 0.f,
-			0.f, 1.f, 0.f,        0.5f, 1.f,		 0.f, 0.f, 0.f
-	};
-
-	unsigned int floorIndices[] = {
-		0, 2, 1,
-		1, 2, 3,
-	};
-
-	GLfloat floorVertices[] = {
-		-20.f, 0.f, -20.f,  0.f, 0.f,		0.f, -1.f, 0.f,
-		20.f, 0.f, -20.f,	10.f, 0.f,		0.f, -1.f, 0.f,
-		-20.f, 0.f, 20.f,   0.f, 10.f,		0.f, -1.f, 0.f,
-		20.f, 0.f, 20.f,	10.f, 10.f,		0.f, -1.f, 0.f
-	};
-
-	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
-
-	Mesh* obj1 = new Mesh();
-	obj1->CreateMesh(vertices, indices, 32, 12);
-	meshList.push_back(obj1);
-
-	Mesh* obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 32, 12);
-	meshList.push_back(obj2);
-
-	Mesh* obj3 = new Mesh();
-	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
-	meshList.push_back(obj3);
-
-}
-
 void CreateShaders()
 {
 	Shader* shader1 = new Shader();
@@ -182,33 +143,20 @@ void CreateShaders()
 void RenderScene()
 {
 	glm::mat4 model(1.f);
-	model = glm::translate(model, glm::vec3(0.f, 0.0f, -2.5f));
-	//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.f));
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	brickTexture.UseTexture();
-	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	meshList[0]->RenderMesh();
-
-	model = glm::mat4(1.f);
-	model = glm::translate(model, glm::vec3(0.f, 4.0f, -2.5f));
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	dirtTexture.UseTexture();
-	matteMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	meshList[1]->RenderMesh();
-
-	model = glm::mat4(1.f);
-	model = glm::translate(model, glm::vec3(0.f, -2.0f, 0.f));
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	dirtTexture.UseTexture();
-	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	meshList[2]->RenderMesh();
 
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 10.0f));
+	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-	xwing.RenderModel();
+	matteMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+	street.RenderModel();
+	
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(0.006f, 0.006f, 0.006f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	matteMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+	cover.RenderModel();
 
 	blackhawkAngle += 0.1;
 	if (blackhawkAngle > 360.f)
@@ -216,15 +164,55 @@ void RenderScene()
 		blackhawkAngle = 0.1f;
 	}
 
+	mainRotorAngle += 1.5;
+	if (mainRotorAngle > 360.0f)
+	{
+		mainRotorAngle = 0.0f;
+	}
+
+	// Rotation of the rear rotor
+	rearRotorAngle -= 1.0;
+	if (rearRotorAngle < -360.0f)
+	{
+		rearRotorAngle = 360.0f;
+	}
+
+
 	model = glm::mat4(1.0f);
-	model = glm::rotate(model, -blackhawkAngle * toRadians, glm::vec3(0.f, 1.f, 0.f));
+	model = glm::translate(model, glm::vec3(0.0f, 10.0f,0.0f));
+	model = glm::rotate(model, blackhawkAngle * toRadians, glm::vec3(0.f, 1.f, 0.f));
 	model = glm::translate(model, glm::vec3(-8.0f, 2.0f, 0.0f));
 	model = glm::rotate(model, -20.f * toRadians, glm::vec3(0.f, 0.f, 1.f));
-	model = glm::rotate(model, -90.0f * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+	model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 	blackhawk.RenderModel();
+
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 10.0f, 0.0f));
+	model = glm::rotate(model, blackhawkAngle * toRadians, glm::vec3(0.f, 1.f, 0.f));
+	model = glm::translate(model, glm::vec3(-8.0f, 2.0f, 0.0f));
+	model = glm::rotate(model, -20.f * toRadians, glm::vec3(0.f, 0.f, 1.f));
+	model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+	model = glm::translate(model, glm::vec3(-2.3097f, 47.8945f, -100.521f));
+	model = glm::rotate(model, rearRotorAngle * toRadians, glm::vec3(1.f, 0.f, 0.f));
+	model = glm::translate(model, glm::vec3(2.3097f, -47.8945f, 100.521f));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+	blackhawkRearRotor.RenderModel();
+
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 10.0f, 0.0f));
+	model = glm::rotate(model, blackhawkAngle * toRadians, glm::vec3(0.f, 1.f, 0.f));
+	model = glm::translate(model, glm::vec3(-8.0f, 2.0f, 0.0f));
+	model = glm::rotate(model, -20.f * toRadians, glm::vec3(0.f, 0.f, 1.f));
+	model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+	model = glm::translate(model, glm::vec3(0.f, 40.3176f, 25.305));
+	model = glm::rotate(model, mainRotorAngle * toRadians, glm::vec3(0.f, 1.f, 0.f));
+	model = glm::translate(model, glm::vec3(0.f, -40.3176f, -25.305));
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+	blackhawkMainRotor.RenderModel();
 }
 
 void DirectionalShadowMapPass(DirectionalLight* light)
@@ -323,7 +311,6 @@ int main()
 	mainWindow = Window(1366, 768); //1280:1024, 1024:768
 	mainWindow.Initialise();
 
-	CreateObjects();
 	CreateShaders();
 
 	camera = Camera(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f), -90.f, 0.f, 5.f, 0.05f);
@@ -340,11 +327,20 @@ int main()
 	shinyMaterial = Material(4.f, 256);
 	matteMaterial = Material(0.3f, 4);
 
-	xwing = Model();
-	xwing.LoadModel("models/x-wing.obj");
-
 	blackhawk = Model();
-	blackhawk.LoadModel("models/uh60.obj");
+	blackhawk.LoadModel("models/Chopper.obj");
+
+	blackhawkMainRotor = Model();
+	blackhawkMainRotor.LoadModel("models/MainRotor.obj");
+
+	blackhawkRearRotor = Model();
+	blackhawkRearRotor.LoadModel("models/RearRotor.obj");
+
+	street = Model();
+	street.LoadModel("models/Map.obj");
+	
+	cover = Model();
+	cover.LoadModel("models/Cover.obj");
 
 	mainLight = DirectionalLight(
 		2048, 2048,
@@ -355,21 +351,78 @@ int main()
 
 	pointLights[pointLightCount++] = PointLight(
 		1024, 1024,
-		0.01f, 100.f,
-		0.f, 0.f, 1.f,
-		0.0f, 1.0f,
-		1.0f, 2.f, 0.f,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		5.6f, 1.8f, -1.8f,
 		0.3f, 0.2f, 0.1f
 	);
 
 	pointLights[pointLightCount++] = PointLight(
 		1024, 1024,
-		0.01f, 100.f,
-		0.f, 1.f, 0.f,
-		0.0f, 1.0f,
-		-4.0f, 2.f, 0.f,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		5.6f, 1.8f, 0.6f,
 		0.3f, 0.2f, 0.1f
 	);
+
+	pointLights[pointLightCount++] = PointLight(
+		1024, 1024,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		5.6f, 1.8f, 3.0f,
+		0.3f, 0.2f, 0.1f
+	);
+
+	pointLights[pointLightCount++] = PointLight(
+		1024, 1024,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		5.6f, 1.8f, 5.2f,
+		0.3f, 0.2f, 0.1f
+	);
+
+
+	pointLights[pointLightCount++] = PointLight(
+		1024, 1024,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		-2.9f, 1.8f, -1.8f,
+		0.3f, 0.2f, 0.1f
+	);
+
+	pointLights[pointLightCount++] = PointLight(
+		1024, 1024,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		-2.9f, 1.8f, 0.6f,
+		0.3f, 0.2f, 0.1f
+	);
+
+	pointLights[pointLightCount++] = PointLight(
+		1024, 1024,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		-2.9f, 1.8f, 3.0f,
+		0.3f, 0.2f, 0.1f
+	);
+
+	pointLights[pointLightCount++] = PointLight(
+		1024, 1024,
+		1.f, 5.f,
+		1.f, 0.6f, 0.6f,
+		0.3f, 0.4f,
+		-2.9f, 1.8f, 5.2f,
+		0.3f, 0.2f, 0.1f
+	);
+
+	
 	
 	spotLights[spotLightCount++] = SpotLight(
 		1024, 1024,
@@ -378,17 +431,6 @@ int main()
 		0.0f, 2.f,
 		0.f, 0.f, 0.f,
 		0.0f, -1.f, 0.f,
-		1.0f, 0.0f, 0.0f,
-		20.f
-	);
-
-	spotLights[spotLightCount++] = SpotLight(
-		1024, 1024,
-		0.01f, 100.f,
-		1.f, 1.f, 1.f,
-		0.0f, 1.f,
-		0.f, -1.5f, 0.f,
-		-100.0f, -1.f, 0.f,
 		1.0f, 0.0f, 0.0f,
 		20.f
 	);
@@ -426,6 +468,25 @@ int main()
 		{
 			spotLights[0].Toggle();
 			mainWindow.getKeys()[GLFW_KEY_F] = false;
+		}
+
+		if (mainWindow.getKeys()[GLFW_KEY_T])
+		{
+			previewState++;
+			if (previewState % 3 == 0)
+			{
+				Mesh::isWireframe = false;
+				Mesh::isPoint = false;
+			}
+			else if(previewState%3 == 1){
+				Mesh::isWireframe = true;
+				Mesh::isPoint = false;
+			}
+			else if(previewState%3 == 2){
+				Mesh::isWireframe = false;
+				Mesh::isPoint = true;
+			}
+			mainWindow.getKeys()[GLFW_KEY_T] = false;
 		}
 
 		DirectionalShadowMapPass(&mainLight);

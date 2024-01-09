@@ -1,0 +1,184 @@
+newmtl Seahawk1:Aluminum
+illum 4
+Kd 0.37 0.40 0.37
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 1.00 1.00 1.00
+Ns 0.00
+newmtl Seahawk1:BottomTex
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd TEX_OBC.jpg
+map_Ka TEX_OBC.jpg
+Ni 1.50
+Ks 0.33 0.33 0.33
+Ns 0.00
+newmtl Seahawk1:FlatBlack
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl Seahawk1:FrontSeat
+illum 4
+Kd 0.33 0.30 0.40
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl Seahawk1:FrontSeatHeadrest
+illum 4
+Kd 0.56 0.54 0.80
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl Seahawk1:Glass1
+illum 4
+Kd 0.03 0.03 0.03
+Ka 0.00 0.00 0.00
+Tf 0.29 0.29 0.29
+Ni 1.50
+Ks 1.00 1.00 1.00
+Ns 74.00
+newmtl Seahawk1:GlossyWhite
+illum 4
+Kd 0.58 0.58 0.58
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.84 0.84 0.84
+Ns 92.00
+newmtl Seahawk1:Headlight
+illum 4
+Kd 0.48 0.54 0.56
+Ka 0.00 0.00 0.00
+Tf 0.49 0.49 0.49
+Ni 1.50
+Ks 1.00 1.00 1.00
+Ns 0.00
+newmtl Seahawk1:InstrumentPanel
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd TEX_DASH.jpg
+map_Ka TEX_DASH.jpg
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 0.00
+newmtl Seahawk1:InteriorGenericSteelPanels
+illum 4
+Kd 0.26 0.26 0.26
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 0.00
+newmtl Seahawk1:LHBodyTex
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd TEX_OSCL.jpg
+map_Ka TEX_OSCL.jpg
+bump  -bm 0 TEX_SBMP.jpg
+Ni 1.50
+Ks 0.00 0.00 0.00
+map_Ks TEX_OSSP.jpg
+Ns 85.00
+newmtl Seahawk1:Mirror
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.72 0.72 0.72
+Ns 0.00
+newmtl Seahawk1:OtherPanel
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd TEX_CCON.jpg
+map_Ka TEX_CCON.jpg
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 0.00
+newmtl Seahawk1:PaintedBlackSteel
+illum 4
+Kd 0.13 0.13 0.13
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 90.00
+newmtl Seahawk1:PropellerGray
+illum 4
+Kd 0.40 0.40 0.40
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 52.00
+newmtl Seahawk1:RHBodyTex
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd TEX_OSCR.jpg
+map_Ka TEX_OSCR.jpg
+bump  -bm 0 TEX_SBMP.jpg
+Ni 1.50
+Ks 0.00 0.00 0.00
+map_Ks TEX_OSSP.jpg
+Ns 0.00
+newmtl Seahawk1:ReflectorRed
+illum 4
+Kd 0.80 0.13 0.14
+Ka 0.26 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 0.00
+newmtl Seahawk1:SafetyOrange
+illum 4
+Kd 0.80 0.25 0.13
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl Seahawk1:TireTread
+illum 4
+Kd 0.16 0.16 0.16
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.40 0.40 0.40
+Ns 36.00
+newmtl Seahawk1:TopTex
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd TEX_OTC.jpg
+map_Ka TEX_OTC.jpg
+Ni 1.50
+Ks 0.20 0.20 0.20
+Ns 80.00
+newmtl Seahawk1:Trim2
+illum 4
+Kd 0.60 0.60 0.60
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.89 0.89 0.89
+Ns 90.00

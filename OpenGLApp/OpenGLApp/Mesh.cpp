@@ -1,5 +1,8 @@
 #include "Mesh.h"
 
+bool Mesh::isWireframe = false;
+bool Mesh::isPoint = false;
+
 Mesh::Mesh()
 {
 	VAO = 0;
@@ -40,11 +43,26 @@ void Mesh::CreateMesh(GLfloat *vertices, unsigned int * indices, unsigned int nu
 
 void Mesh::RenderMesh()
 {
+	
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+	if (isWireframe)
+	{
+		glDrawElements(GL_LINES, indexCount, GL_UNSIGNED_INT, 0);
+	}
+	else {
+		if(isPoint)
+		{
+			glDrawElements(GL_POINTS, indexCount, GL_UNSIGNED_INT, 0);
+		}
+		else
+		{
+			glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+		}
+	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
 }
 
 void Mesh::ClearMesh()
