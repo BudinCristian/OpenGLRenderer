@@ -239,4 +239,18 @@ void main()
 	finalColor += CalcSpotLights();
 
 	color = texture(theTexture, TexCoord) * finalColor;
+
+
+
+	float fog_maxdist = 20.0;
+    float fog_mindist = 10;
+	vec4  fog_colour = vec4(0.4, 0.4, 0.4, 1.0);
+
+	// Calculate fog
+	float dist = length(FragPos.xyz- eyePosition);
+	float fog_factor = (fog_maxdist - dist) /
+					  (fog_maxdist - fog_mindist);
+	fog_factor = clamp(fog_factor, 0.0, 1.0);
+
+	color = mix(fog_colour, color, fog_factor);
 }
