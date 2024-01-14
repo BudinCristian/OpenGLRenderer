@@ -6,6 +6,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 
 #include <GLFW/glfw3.h>
+#include <vector>
 
 class Camera
 {
@@ -20,6 +21,9 @@ public:
 	glm::vec3 GetCameraPosition() { return position; }
 	glm::vec3 GetCameraDirection() { return glm::normalize(front); }
 	glm::mat4 calculateViewMatrix();
+
+	void startAnimation();
+	void updateAnimation(GLfloat deltaTime);
 
 	~Camera() = default;
 
@@ -36,6 +40,17 @@ private:
 	GLfloat movementSpeed;
 	GLfloat turnSpeed;
 
+	bool isAnimating;
+	glm::vec3 animationStartPos;
+	glm::vec3 animationEndPos;
+	glm::vec3 cameraLookAt;
+	float animationStartTime;
+	float animationDuration;
+
+	// Additional variables for Bezier spline
+	std::vector<glm::vec3> controlPoints;
+
 	void update();
+	glm::vec3 calculateBezierPoint(float t);
 };
 

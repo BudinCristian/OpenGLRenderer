@@ -242,8 +242,8 @@ void main()
 
 
 
-	float fog_maxdist = 20.0;
-    float fog_mindist = 10;
+	float fog_maxdist = 25.0;
+    float fog_mindist = 15;
 	vec4  fog_colour = vec4(0.4, 0.4, 0.4, 1.0);
 
 	// Calculate fog
